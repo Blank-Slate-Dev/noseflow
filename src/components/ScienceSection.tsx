@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Wind, Moon, Activity, Brain, Zap } from "lucide-react";
 
 const tabs = [
@@ -46,42 +45,38 @@ const tabs = [
 export default function ScienceSection() {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
   const active = tabs.find((t) => t.id === activeTab)!;
+  const ActiveIcon = active.icon;
 
   return (
-    <section id="science" className="py-20 sm:py-28 gradient-section">
+    <section id="science" className="py-12 sm:py-28 gradient-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <p className="text-sm font-semibold text-primary-500 uppercase tracking-widest mb-3 font-[family-name:var(--font-body)]">
+        <div className="text-center mb-8 sm:mb-12">
+          <p className="text-xs sm:text-sm font-semibold text-primary-500 uppercase tracking-widest mb-3 font-[family-name:var(--font-body)]">
             The Science
           </p>
-          <h2 className="font-[family-name:var(--font-heading)] text-4xl sm:text-5xl font-800 text-neutral-900">
+          <h2 className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900">
             Backed by <span className="text-primary-500">Evidence</span>
           </h2>
-        </motion.div>
+        </div>
 
         {/* Tab navigation */}
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = tab.id === activeTab;
+
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all font-[family-name:var(--font-body)] ${
+                className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all font-[family-name:var(--font-body)] ${
                   isActive
                     ? "bg-neutral-900 text-white shadow-lg"
                     : "bg-white text-neutral-600 border border-neutral-200 hover:border-neutral-300 hover:text-neutral-800"
                 }`}
               >
-                <Icon size={16} />
+                <Icon size={14} />
                 {tab.label}
               </button>
             );
@@ -89,45 +84,45 @@ export default function ScienceSection() {
         </div>
 
         {/* Tab content */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active.id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.3 }}
-            className="grid lg:grid-cols-2 gap-10 items-center"
-          >
-            {/* Left — Image placeholder */}
-            <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-primary-50 to-white border border-primary-100 flex items-center justify-center">
-              <div className="text-center px-8">
-                <active.icon size={48} className="mx-auto mb-3 text-primary-300" />
-                <p className="text-sm font-semibold text-neutral-400 font-[family-name:var(--font-heading)]">
-                  Educational Visual
-                </p>
-                <p className="text-xs text-neutral-400 mt-1 font-[family-name:var(--font-body)]">
-                  Add supporting image or diagram
-                </p>
-              </div>
-            </div>
-
-            {/* Right — Text content */}
-            <div>
-              <h3 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-700 text-neutral-900 mb-4">
-                {active.title}
-              </h3>
-              <p className="text-neutral-600 text-base sm:text-lg leading-relaxed font-[family-name:var(--font-body)]">
-                {active.body}
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-10 items-center">
+          {/* Left — Image placeholder */}
+          <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-primary-50 to-white border border-primary-100 flex items-center justify-center">
+            <div className="text-center px-8">
+              <ActiveIcon
+                size={36}
+                className="mx-auto mb-3 text-primary-300 sm:hidden"
+              />
+              <ActiveIcon
+                size={48}
+                className="mx-auto mb-3 text-primary-300 hidden sm:block"
+              />
+              <p className="text-xs sm:text-sm font-semibold text-neutral-400 font-[family-name:var(--font-heading)]">
+                Educational Visual
               </p>
-              <a
-                href="#shop"
-                className="inline-flex items-center gap-2 mt-8 bg-neutral-900 text-white font-semibold px-6 py-3 rounded-full text-sm hover:bg-neutral-800 transition-colors"
-              >
-                Try NoseFlow
-              </a>
+              <p className="text-[10px] sm:text-xs text-neutral-400 mt-1 font-[family-name:var(--font-body)]">
+                Add supporting image or diagram
+              </p>
             </div>
-          </motion.div>
-        </AnimatePresence>
+          </div>
+
+          {/* Right — Text content */}
+          <div>
+            <h3 className="font-[family-name:var(--font-heading)] text-xl sm:text-3xl font-700 text-neutral-900 mb-3 sm:mb-4">
+              {active.title}
+            </h3>
+
+            <p className="text-sm sm:text-lg text-neutral-600 leading-relaxed font-[family-name:var(--font-body)]">
+              {active.body}
+            </p>
+
+            <a
+              href="#shop"
+              className="inline-flex items-center gap-2 mt-6 sm:mt-8 bg-neutral-900 text-white font-semibold px-6 py-3 rounded-full text-sm hover:bg-neutral-800 transition-colors"
+            >
+              Try NoseFlow
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );

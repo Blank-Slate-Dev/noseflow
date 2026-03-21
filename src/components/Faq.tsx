@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
 
 const faqs = [
@@ -11,7 +10,7 @@ const faqs = [
     questions: [
       {
         q: "Why is nose breathing better than mouth breathing?",
-        a: "Your nose does a lot more than just let air in. When you breathe through your nose, your sinuses release nitric oxide — a molecule that widens blood vessels and helps your lungs absorb 10–18% more oxygen than mouth breathing. Nasal breathing also activates your parasympathetic nervous system (the \"rest and digest\" mode), which lowers your heart rate and blood pressure. Mouth breathing skips all of this.",
+        a: 'Your nose does a lot more than just let air in. When you breathe through your nose, your sinuses release nitric oxide — a molecule that widens blood vessels and helps your lungs absorb 10–18% more oxygen than mouth breathing. Nasal breathing also activates your parasympathetic nervous system (the "rest and digest" mode), which lowers your heart rate and blood pressure. Mouth breathing skips all of this.',
       },
       {
         q: "Can mouth breathing actually affect my health long-term?",
@@ -82,102 +81,71 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
     <div className="border-b border-neutral-200 last:border-b-0">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-start justify-between gap-4 py-5 text-left"
+        className="w-full flex items-start justify-between gap-4 py-4 sm:py-5 text-left"
       >
-        <span className="font-[family-name:var(--font-heading)] text-base sm:text-lg font-600 text-neutral-900">
+        <span className="font-[family-name:var(--font-heading)] text-sm sm:text-lg font-600 text-neutral-900">
           {question}
         </span>
         <span className="shrink-0 mt-1">
           {open ? (
-            <Minus size={18} className="text-primary-500" />
+            <Minus size={16} className="text-primary-500" />
           ) : (
-            <Plus size={18} className="text-neutral-400" />
+            <Plus size={16} className="text-neutral-400" />
           )}
         </span>
       </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <p className="pb-5 text-neutral-600 text-sm sm:text-base leading-relaxed font-[family-name:var(--font-body)] max-w-3xl">
-              {answer}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {open && (
+        <p className="pb-4 sm:pb-5 text-neutral-600 text-xs sm:text-base leading-relaxed font-[family-name:var(--font-body)] max-w-3xl">
+          {answer}
+        </p>
+      )}
     </div>
   );
 }
 
 export default function Faq() {
   return (
-    <section id="faq" className="py-20 sm:py-28 bg-white">
+    <section id="faq" className="py-12 sm:py-28 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-14"
-        >
-          <p className="text-sm font-semibold text-primary-500 uppercase tracking-widest mb-3 font-[family-name:var(--font-body)]">
+        <div className="text-center mb-8 sm:mb-14">
+          <p className="text-xs sm:text-sm font-semibold text-primary-500 uppercase tracking-widest mb-3 font-[family-name:var(--font-body)]">
             FAQ
           </p>
-          <h2 className="font-[family-name:var(--font-heading)] text-4xl sm:text-5xl font-800 text-neutral-900">
+          <h2 className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900">
             Questions? <span className="text-primary-500">Answered.</span>
           </h2>
-        </motion.div>
+        </div>
 
         {/* FAQ groups */}
-        <div className="space-y-10">
+        <div className="space-y-8 sm:space-y-10">
           {faqs.map((group) => (
-            <motion.div
-              key={group.category}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h3 className="font-[family-name:var(--font-heading)] text-xs font-700 uppercase tracking-widest text-primary-500 mb-4">
+            <div key={group.category}>
+              <h3 className="font-[family-name:var(--font-heading)] text-[10px] sm:text-xs font-700 uppercase tracking-widest text-primary-500 mb-3 sm:mb-4">
                 {group.category}
               </h3>
-              <div className="bg-neutral-50 rounded-2xl border border-neutral-200/60 px-6">
+              <div className="bg-neutral-50 rounded-2xl border border-neutral-200/60 px-4 sm:px-6">
                 {group.questions.map((item) => (
-                  <FaqItem
-                    key={item.q}
-                    question={item.q}
-                    answer={item.a}
-                  />
+                  <FaqItem key={item.q} question={item.q} answer={item.a} />
                 ))}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mt-12"
-        >
-          <p className="text-neutral-500 text-sm mb-4 font-[family-name:var(--font-body)]">
+        <div className="text-center mt-8 sm:mt-12">
+          <p className="text-neutral-500 text-xs sm:text-sm mb-4 font-[family-name:var(--font-body)]">
             Still have questions? We&apos;d love to help.
           </p>
+
           <a
             href="#"
             className="inline-flex items-center gap-2 border-2 border-neutral-300 text-neutral-700 font-semibold px-6 py-3 rounded-full text-sm hover:border-neutral-400 transition-colors"
           >
             Contact Us
           </a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
