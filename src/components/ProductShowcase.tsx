@@ -5,12 +5,28 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, Check, Wind } from "lucide-react";
 
-const sizes = [
+const colours = [
   {
-    id: "small",
-    label: "Small",
-    description: "Narrower nasal passages",
+    id: "clear",
+    label: "Clear",
+    hex: "#e2e8f0",
+    ring: "#cbd5e1",
   },
+  {
+    id: "blue",
+    label: "Blue",
+    hex: "#3a9dff",
+    ring: "#0a7cf5",
+  },
+  {
+    id: "orange",
+    label: "Orange",
+    hex: "#fb923c",
+    ring: "#f97316",
+  },
+];
+
+const sizes = [
   {
     id: "medium",
     label: "Medium",
@@ -21,6 +37,7 @@ const sizes = [
     id: "large",
     label: "Large",
     description: "Wider nasal passages",
+    popular: false,
   },
 ];
 
@@ -29,12 +46,15 @@ const features = [
   "Comfortable for all-night wear",
   "Reusable — wash and reuse daily",
   "Includes storage case",
-  "3 sizes for perfect fit",
   "Instant airflow improvement",
+  "Fits discreetly inside the nose",
 ];
 
 export default function ProductShowcase() {
+  const [selectedColour, setSelectedColour] = useState("clear");
   const [selectedSize, setSelectedSize] = useState("medium");
+
+  const activeColour = colours.find((c) => c.id === selectedColour)!;
 
   return (
     <section id="shop" className="py-20 sm:py-28 bg-white">
@@ -67,8 +87,15 @@ export default function ProductShowcase() {
             className="relative"
           >
             <div className="aspect-square rounded-3xl bg-gradient-to-br from-primary-50 to-accent-50 border border-primary-100 flex items-center justify-center relative overflow-hidden">
-              {/* Background glow */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 rounded-full bg-primary-200/20 blur-3xl" />
+              {/* Background glow that shifts with colour selection */}
+              <motion.div
+                key={selectedColour}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.15 }}
+                transition={{ duration: 0.4 }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 rounded-full blur-3xl"
+                style={{ backgroundColor: activeColour.hex }}
+              />
 
               {/* Placeholder */}
               <div className="relative text-center px-8">
@@ -81,17 +108,24 @@ export default function ProductShowcase() {
                 </p>
               </div>
 
-              {/* Floating size badge */}
+              {/* Floating colour + size badge */}
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={selectedSize}
+                  key={`${selectedColour}-${selectedSize}`}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm border border-neutral-200 rounded-full px-4 py-2 shadow-sm"
+                  className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm border border-neutral-200 rounded-full px-4 py-2 shadow-sm flex items-center gap-2"
                 >
+                  <span
+                    className="w-3 h-3 rounded-full border"
+                    style={{
+                      backgroundColor: activeColour.hex,
+                      borderColor: activeColour.ring,
+                    }}
+                  />
                   <span className="text-sm font-bold text-neutral-900 font-[family-name:var(--font-heading)]">
-                    Size: {selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1)}
+                    {activeColour.label} · {selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1)}
                   </span>
                 </motion.div>
               </AnimatePresence>
@@ -106,7 +140,7 @@ export default function ProductShowcase() {
             transition={{ duration: 0.6, delay: 0.15 }}
           >
             <p className="text-sm font-semibold text-primary-500 uppercase tracking-widest mb-2 font-[family-name:var(--font-body)]">
-              NoseFlow Nasal Dilator Kit
+              NoseFlow Nasal Dilator
             </p>
             <h3 className="font-[family-name:var(--font-heading)] text-3xl sm:text-4xl font-800 text-neutral-900 mb-2">
               Silicone Nasal Dilator
@@ -116,16 +150,45 @@ export default function ProductShowcase() {
             </p>
 
             <p className="text-neutral-600 leading-relaxed mb-8 font-[family-name:var(--font-body)]">
-              Each kit includes all 3 sizes (S, M, L) so you can find your
-              perfect fit. Made from ultra-soft, medical-grade silicone that
-              moulds comfortably inside your nose — you&apos;ll barely feel it,
-              but you&apos;ll immediately breathe the difference.
+              Made from ultra-soft, medical-grade silicone that moulds
+              comfortably inside your nose — you&apos;ll barely feel it, but
+              you&apos;ll immediately breathe the difference. Comes with a
+              compact storage case.
             </p>
+
+            {/* Colour selector */}
+            <div className="mb-6">
+              <p className="text-sm font-semibold text-neutral-700 mb-3 font-[family-name:var(--font-body)]">
+                Colour:{" "}
+                <span className="text-neutral-500 font-normal">
+                  {activeColour.label}
+                </span>
+              </p>
+              <div className="flex gap-3">
+                {colours.map((colour) => (
+                  <button
+                    key={colour.id}
+                    onClick={() => setSelectedColour(colour.id)}
+                    className={`w-12 h-12 rounded-full border-2 transition-all flex items-center justify-center ${
+                      selectedColour === colour.id
+                        ? "border-neutral-900 scale-110"
+                        : "border-neutral-200 hover:border-neutral-400"
+                    }`}
+                    aria-label={`Select ${colour.label}`}
+                  >
+                    <span
+                      className="w-8 h-8 rounded-full"
+                      style={{ backgroundColor: colour.hex }}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* Size selector */}
             <div className="mb-8">
               <p className="text-sm font-semibold text-neutral-700 mb-3 font-[family-name:var(--font-body)]">
-                Select your primary size:
+                Size:
               </p>
               <div className="flex gap-3">
                 {sizes.map((size) => (

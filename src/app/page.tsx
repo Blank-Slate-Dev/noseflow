@@ -6,12 +6,13 @@ import StatsBar from "@/components/StatsBar";
 import ProductShowcase from "@/components/ProductShowcase";
 import ScienceSection from "@/components/ScienceSection";
 import Testimonials from "@/components/Testimonials";
+import Faq from "@/components/Faq";
 import CtaBanner from "@/components/CtaBanner";
 import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen overflow-x-hidden">
       <Navbar />
       <Hero />
       <BenefitsTicker />
@@ -19,6 +20,7 @@ export default function Home() {
       <ProductShowcase />
       <ScienceSection />
       <Testimonials />
+      <Faq />
       <CtaBanner />
       <Footer />
     </main>
