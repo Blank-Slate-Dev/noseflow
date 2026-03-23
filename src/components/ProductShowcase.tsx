@@ -2,7 +2,9 @@
 "use client";
 
 import { useState } from "react";
-import { ShoppingBag, Check, Wind } from "lucide-react";
+import Image from "next/image";
+import { ShoppingBag, Check } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const colours = [
   {
@@ -10,18 +12,21 @@ const colours = [
     label: "Clear",
     hex: "#e2e8f0",
     ring: "#cbd5e1",
+    image: "/Nasal_Dilator_Product_Image_Clear.png",
   },
   {
     id: "blue",
     label: "Blue",
     hex: "#3a9dff",
     ring: "#0a7cf5",
+    image: "/Nasal_Dilator_Product_Image_Blue.png",
   },
   {
     id: "orange",
     label: "Orange",
     hex: "#fb923c",
     ring: "#f97316",
+    image: "/Nasal_Dilator_Product_Image_Orange.png",
   },
 ];
 
@@ -52,16 +57,27 @@ const features = [
 export default function ProductShowcase() {
   const [selectedColour, setSelectedColour] = useState("clear");
   const [selectedSize, setSelectedSize] = useState("medium");
+  const [direction, setDirection] = useState(1);
 
   const activeColour = colours.find((c) => c.id === selectedColour)!;
+
+  const handleColourChange = (newColourId: string) => {
+    if (newColourId === selectedColour) return;
+
+    const currentIndex = colours.findIndex((c) => c.id === selectedColour);
+    const nextIndex = colours.findIndex((c) => c.id === newColourId);
+
+    setDirection(nextIndex > currentIndex ? 1 : -1);
+    setSelectedColour(newColourId);
+  };
 
   return (
     <section id="shop" className="py-12 sm:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
         <div className="text-center mb-10 sm:mb-16">
           <h2 className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900 mb-4">
-            One Product. <span className="text-primary-500">Better Breathing.</span>
+            One Product.{" "}
+            <span className="text-primary-500">Better Breathing.</span>
           </h2>
           <p className="text-base sm:text-lg text-neutral-500 max-w-2xl mx-auto font-[family-name:var(--font-body)]">
             Our silicone nasal dilators gently expand the nasal valve — the
@@ -71,28 +87,65 @@ export default function ProductShowcase() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          {/* Left — Product image area */}
+          {/* LEFT — IMAGE */}
           <div className="relative">
-            <div className="aspect-square rounded-3xl bg-gradient-to-br from-primary-50 to-accent-50 border border-primary-100 flex items-center justify-center relative overflow-hidden">
-              {/* Background glow that shifts with colour selection */}
+            <div className="aspect-square max-w-[420px] mx-auto rounded-3xl bg-gradient-to-br from-primary-50 to-accent-50 border border-primary-100 flex items-center justify-center relative overflow-hidden">
+              <div className="absolute w-[70%] h-[70%] rounded-full bg-neutral-200/40 blur-3xl" />
+              <div className="absolute w-[40%] h-[40%] rounded-full bg-neutral-400/20 blur-2xl" />
+
               <div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 rounded-full blur-3xl opacity-15 transition-colors duration-400"
+                className="absolute w-[55%] h-[55%] rounded-full blur-2xl opacity-20 transition-all duration-500"
                 style={{ backgroundColor: activeColour.hex }}
               />
 
-              {/* Placeholder */}
-              <div className="relative text-center px-8">
-                <Wind size={48} className="mx-auto mb-4 text-primary-300 hidden sm:block" />
-                <Wind size={36} className="mx-auto mb-3 text-primary-300 sm:hidden" />
-                <p className="text-sm sm:text-base font-semibold text-neutral-500 font-[family-name:var(--font-heading)]">
-                  Product Photography
-                </p>
-                <p className="text-xs sm:text-sm text-neutral-400 mt-1 font-[family-name:var(--font-body)]">
-                  Replace with high-res product image
-                </p>
+              <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                <AnimatePresence mode="wait" initial={false} custom={direction}>
+                  <motion.div
+                    key={activeColour.id}
+                    custom={direction}
+                    initial={{
+                      opacity: 0,
+                      x: direction > 0 ? 72 : -72,
+                      scale: 0.985,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                      scale: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      x: direction > 0 ? -96 : 96,
+                      scale: 0.99,
+                    }}
+                    transition={{
+                      x: {
+                        duration: 0.2,
+                        ease: [0.55, 0.06, 0.68, 0.19],
+                      },
+                      opacity: {
+                        duration: 0.34,
+                        ease: "easeOut",
+                      },
+                      scale: {
+                        duration: 0.28,
+                        ease: [0.22, 1, 0.36, 1],
+                      },
+                    }}
+                    className="absolute inset-0 flex items-center justify-center"
+                  >
+                    <Image
+                      src={activeColour.image}
+                      alt={`${activeColour.label} NoseFlow Nasal Dilator`}
+                      width={500}
+                      height={500}
+                      className="relative w-[104%] sm:w-[98%] h-auto object-contain drop-shadow-[0_28px_65px_rgba(0,0,0,0.22)] -translate-y-1"
+                      priority
+                    />
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
-              {/* Colour + size badge */}
               <div className="absolute top-4 right-4 sm:top-6 sm:right-6 bg-white/90 backdrop-blur-sm border border-neutral-200 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-sm flex items-center gap-2">
                 <span
                   className="w-3 h-3 rounded-full border"
@@ -102,23 +155,43 @@ export default function ProductShowcase() {
                   }}
                 />
                 <span className="text-xs sm:text-sm font-bold text-neutral-900 font-[family-name:var(--font-heading)]">
-                  {activeColour.label} · {selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1)}
+                  {activeColour.label} ·{" "}
+                  {selectedSize.charAt(0).toUpperCase() +
+                    selectedSize.slice(1)}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Right — Product info & purchase */}
+          {/* RIGHT — INFO */}
           <div>
             <p className="text-xs sm:text-sm font-semibold text-primary-500 uppercase tracking-widest mb-2 font-[family-name:var(--font-body)]">
               NoseFlow Nasal Dilator
             </p>
+
             <h3 className="font-[family-name:var(--font-heading)] text-2xl sm:text-4xl font-800 text-neutral-900 mb-2">
               Silicone Nasal Dilator
             </h3>
-            <p className="text-xl sm:text-2xl font-700 text-neutral-900 mb-4 sm:mb-6 font-[family-name:var(--font-heading)]">
-              $29.95 <span className="text-sm sm:text-base font-400 text-neutral-400">AUD</span>
-            </p>
+
+            <div className="mb-6">
+              <p className="text-2xl font-bold text-neutral-900">$14.95</p>
+              <p className="text-sm text-neutral-500">1 unit</p>
+
+              <div className="mt-2 space-y-1 text-sm text-neutral-600">
+                <p>
+                  2 for{" "}
+                  <span className="font-semibold text-neutral-900">
+                    $19.95
+                  </span>
+                </p>
+                <p>
+                  4 for{" "}
+                  <span className="font-semibold text-neutral-900">
+                    $29.99
+                  </span>
+                </p>
+              </div>
+            </div>
 
             <p className="text-sm sm:text-base text-neutral-600 leading-relaxed mb-6 sm:mb-8 font-[family-name:var(--font-body)]">
               Made from ultra-soft, medical-grade silicone that moulds
@@ -127,19 +200,21 @@ export default function ProductShowcase() {
               compact storage case.
             </p>
 
-            {/* Colour selector */}
+            {/* COLOUR */}
             <div className="mb-5 sm:mb-6">
-              <p className="text-sm font-semibold text-neutral-700 mb-3 font-[family-name:var(--font-body)]">
+              <p className="text-sm font-semibold text-neutral-700 mb-3">
                 Colour:{" "}
                 <span className="text-neutral-500 font-normal">
                   {activeColour.label}
                 </span>
               </p>
+
               <div className="flex gap-3">
                 {colours.map((colour) => (
                   <button
                     key={colour.id}
-                    onClick={() => setSelectedColour(colour.id)}
+                    type="button"
+                    onClick={() => handleColourChange(colour.id)}
                     className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 transition-all flex items-center justify-center ${
                       selectedColour === colour.id
                         ? "border-neutral-900 scale-110"
@@ -156,15 +231,17 @@ export default function ProductShowcase() {
               </div>
             </div>
 
-            {/* Size selector */}
+            {/* SIZE */}
             <div className="mb-6 sm:mb-8">
-              <p className="text-sm font-semibold text-neutral-700 mb-3 font-[family-name:var(--font-body)]">
+              <p className="text-sm font-semibold text-neutral-700 mb-3">
                 Size:
               </p>
+
               <div className="flex gap-3">
                 {sizes.map((size) => (
                   <button
                     key={size.id}
+                    type="button"
                     onClick={() => setSelectedSize(size.id)}
                     className={`relative flex-1 p-3 sm:p-4 rounded-xl border-2 text-center transition-all ${
                       selectedSize === size.id
@@ -173,14 +250,14 @@ export default function ProductShowcase() {
                     }`}
                   >
                     {size.popular && (
-                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-primary-500 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      <span className="pointer-events-none absolute -top-2.5 left-1/2 -translate-x-1/2 bg-primary-500 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                         Popular
                       </span>
                     )}
-                    <p className="font-[family-name:var(--font-heading)] font-700 text-sm sm:text-base text-neutral-900">
+                    <p className="font-700 text-sm sm:text-base text-neutral-900">
                       {size.label}
                     </p>
-                    <p className="text-[10px] sm:text-xs text-neutral-500 mt-0.5 font-[family-name:var(--font-body)]">
+                    <p className="text-[10px] sm:text-xs text-neutral-500 mt-0.5">
                       {size.description}
                     </p>
                   </button>
@@ -188,23 +265,23 @@ export default function ProductShowcase() {
               </div>
             </div>
 
-            {/* Add to cart */}
-            <button className="w-full flex items-center justify-center gap-2 bg-neutral-900 text-white font-semibold px-8 py-3.5 sm:py-4 rounded-full text-sm sm:text-base hover:bg-neutral-800 transition-colors mb-6">
+            {/* CTA */}
+            <button
+              type="button"
+              className="w-full flex items-center justify-center gap-2 bg-neutral-900 text-white font-semibold px-8 py-3.5 sm:py-4 rounded-full text-sm sm:text-base hover:bg-neutral-800 transition-colors mb-6"
+            >
               <ShoppingBag size={18} />
-              Add to Cart — $29.95
+              Add to Cart
             </button>
 
-            {/* Features list */}
+            {/* FEATURES */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 sm:gap-y-3">
               {features.map((feature) => (
                 <span
                   key={feature}
-                  className="flex items-start gap-2 text-xs sm:text-sm text-neutral-600 font-[family-name:var(--font-body)]"
+                  className="flex items-start gap-2 text-xs sm:text-sm text-neutral-600"
                 >
-                  <Check
-                    size={14}
-                    className="text-accent-500 shrink-0 mt-0.5"
-                  />
+                  <Check size={14} className="text-accent-500 mt-0.5" />
                   {feature}
                 </span>
               ))}

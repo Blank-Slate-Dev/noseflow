@@ -1,6 +1,7 @@
+// src/components/Hero.tsx
 "use client";
 
-import { motion } from "framer-motion";
+import Image from "next/image";
 import { ArrowRight, Wind } from "lucide-react";
 
 export default function Hero() {
@@ -85,7 +86,7 @@ export default function Hero() {
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-accent-500" />
-                Reusable &amp; washable
+                {"Reusable & washable"}
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-accent-500" />
@@ -94,29 +95,19 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right — Product visual placeholder */}
+          {/* Right — Product image */}
           <div className="relative flex items-center justify-center mt-4 lg:mt-0">
             <div className="relative w-56 h-56 sm:w-96 sm:h-96 lg:w-[480px] lg:h-[480px]">
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-200/40 to-accent-200/40 blur-2xl" />
 
-              <div className="relative w-full h-full rounded-full bg-gradient-to-br from-primary-50 to-accent-50 border border-primary-200/30 flex items-center justify-center">
-                <div className="text-center px-4 sm:px-8">
-                  <Wind
-                    size={36}
-                    className="mx-auto mb-3 sm:mb-4 text-primary-400 sm:hidden"
-                  />
-                  <Wind
-                    size={48}
-                    className="mx-auto mb-4 text-primary-400 hidden sm:block"
-                  />
-                  <p className="text-xs sm:text-sm font-semibold text-neutral-500 font-[family-name:var(--font-heading)]">
-                    Product Image
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-neutral-400 mt-1">
-                    Replace with product photography
-                  </p>
-                </div>
-              </div>
+              <Image
+                src="/Clear_Nasal_Dilator_Product_Image.png"
+                alt="NoseFlow Clear Nasal Dilator"
+                width={480}
+                height={480}
+                className="relative w-full h-full object-contain drop-shadow-lg"
+                priority
+              />
 
               <div className="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-accent-100 border border-accent-200/50 flex items-center justify-center animate-float-slow">
                 <span className="text-[10px] sm:text-xs font-bold text-accent-600">
