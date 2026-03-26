@@ -1,10 +1,11 @@
 // src/components/ProductShowcase.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
-import { ShoppingBag, Check } from "lucide-react";
+import { ShoppingBag, Check, Minus, Plus } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useCart } from "@/context/CartContext";
 
 const colours = [
   {
@@ -54,21 +55,88 @@ const features = [
   "Fits discreetly inside the nose",
 ];
 
+const presets = [
+  { qty: 1, price: 14.95, label: "Single", save: null },
+  { qty: 2, price: 19.95, label: "2 Pack", save: "Save $9.95" },
+  { qty: 4, price: 29.99, label: "4 Pack", save: "Save $29.81" },
+];
+
+function getPrice(qty: number): number {
+  if (qty <= 0) return 0;
+  if (qty === 1) return 14.95;
+  if (qty === 2) return 19.95;
+  if (qty === 3) return 19.95 + 14.95;
+  if (qty === 4) return 29.99;
+  return 29.99 + (qty - 4) * 14.95;
+}
+
+function getPricePerUnit(qty: number): string {
+  return (getPrice(qty) / qty).toFixed(2);
+}
+
+const slideVariants = {
+  enter: (dir: number) => ({
+    opacity: 0,
+    x: dir > 0 ? 72 : -72,
+    scale: 0.985,
+  }),
+  center: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+  },
+  exit: (dir: number) => ({
+    opacity: 0,
+    x: dir > 0 ? -96 : 96,
+    scale: 0.99,
+  }),
+};
+
 export default function ProductShowcase() {
   const [selectedColour, setSelectedColour] = useState("clear");
   const [selectedSize, setSelectedSize] = useState("medium");
-  const [direction, setDirection] = useState(1);
+  const [quantity, setQuantity] = useState(1);
+  const [addedFeedback, setAddedFeedback] = useState(false);
+  const directionRef = useRef(1);
+  const { addItem } = useCart();
 
   const activeColour = colours.find((c) => c.id === selectedColour)!;
+  const totalPrice = getPrice(quantity);
+  const pricePerUnit = getPricePerUnit(quantity);
+  const fullPrice = (quantity * 14.95).toFixed(2);
+  const isSaving = totalPrice < quantity * 14.95;
 
   const handleColourChange = (newColourId: string) => {
     if (newColourId === selectedColour) return;
-
     const currentIndex = colours.findIndex((c) => c.id === selectedColour);
     const nextIndex = colours.findIndex((c) => c.id === newColourId);
-
-    setDirection(nextIndex > currentIndex ? 1 : -1);
+    directionRef.current = nextIndex > currentIndex ? 1 : -1;
     setSelectedColour(newColourId);
+  };
+
+  const handlePreset = (qty: number) => {
+    setQuantity(qty);
+  };
+
+  const increment = () => setQuantity((q) => Math.min(q + 1, 20));
+  const decrement = () => setQuantity((q) => Math.max(q - 1, 1));
+
+  const handleAddToCart = () => {
+    addItem({
+      colour: activeColour.label,
+      colourHex: activeColour.hex,
+      size: selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1),
+      quantity,
+      price: totalPrice,
+      image: activeColour.image,
+    });
+
+    // Show feedback
+    setAddedFeedback(true);
+    setTimeout(() => setAddedFeedback(false), 1500);
+
+    // Reset quantity after adding
+    setQuantity(1);
   };
 
   return (
@@ -99,38 +167,18 @@ export default function ProductShowcase() {
               />
 
               <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
-                <AnimatePresence mode="wait" initial={false} custom={direction}>
+                <AnimatePresence mode="wait" initial={false} custom={directionRef.current}>
                   <motion.div
                     key={activeColour.id}
-                    custom={direction}
-                    initial={{
-                      opacity: 0,
-                      x: direction > 0 ? 72 : -72,
-                      scale: 0.985,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      x: 0,
-                      scale: 1,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      x: direction > 0 ? -96 : 96,
-                      scale: 0.99,
-                    }}
+                    custom={directionRef.current}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
                     transition={{
-                      x: {
-                        duration: 0.2,
-                        ease: [0.55, 0.06, 0.68, 0.19],
-                      },
-                      opacity: {
-                        duration: 0.34,
-                        ease: "easeOut",
-                      },
-                      scale: {
-                        duration: 0.28,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
+                      x: { duration: 0.2, ease: [0.55, 0.06, 0.68, 0.19] },
+                      opacity: { duration: 0.34, ease: "easeOut" },
+                      scale: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
                     }}
                     className="absolute inset-0 flex items-center justify-center"
                   >
@@ -156,8 +204,7 @@ export default function ProductShowcase() {
                 />
                 <span className="text-xs sm:text-sm font-bold text-neutral-900 font-[family-name:var(--font-heading)]">
                   {activeColour.label} ·{" "}
-                  {selectedSize.charAt(0).toUpperCase() +
-                    selectedSize.slice(1)}
+                  {selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1)}
                 </span>
               </div>
             </div>
@@ -173,23 +220,84 @@ export default function ProductShowcase() {
               Silicone Nasal Dilator
             </h3>
 
+            {/* Price display */}
             <div className="mb-6">
-              <p className="text-2xl font-bold text-neutral-900">$14.95</p>
-              <p className="text-sm text-neutral-500">1 unit</p>
+              <div className="flex items-baseline gap-2">
+                <p className="text-2xl sm:text-3xl font-bold text-neutral-900">
+                  ${totalPrice.toFixed(2)}
+                </p>
+                {isSaving && (
+                  <p className="text-sm text-neutral-400 line-through">
+                    ${fullPrice}
+                  </p>
+                )}
+              </div>
+              <p className="text-sm text-neutral-500 mt-0.5">
+                ${pricePerUnit} each
+                {isSaving && (
+                  <span className="ml-2 text-accent-600 font-semibold">
+                    — You save ${(quantity * 14.95 - totalPrice).toFixed(2)}
+                  </span>
+                )}
+              </p>
+            </div>
 
-              <div className="mt-2 space-y-1 text-sm text-neutral-600">
-                <p>
-                  2 for{" "}
-                  <span className="font-semibold text-neutral-900">
-                    $19.95
-                  </span>
-                </p>
-                <p>
-                  4 for{" "}
-                  <span className="font-semibold text-neutral-900">
-                    $29.99
-                  </span>
-                </p>
+            {/* Quantity — Preset bundles */}
+            <div className="mb-4">
+              <p className="text-sm font-semibold text-neutral-700 mb-3">
+                Quantity:
+              </p>
+              <div className="flex gap-2 sm:gap-3">
+                {presets.map((preset) => (
+                  <button
+                    key={preset.qty}
+                    type="button"
+                    onClick={() => handlePreset(preset.qty)}
+                    className={`relative flex-1 p-2.5 sm:p-3 rounded-xl border-2 text-center transition-all ${
+                      quantity === preset.qty
+                        ? "border-primary-500 bg-primary-50"
+                        : "border-neutral-200 bg-white hover:border-neutral-300"
+                    }`}
+                  >
+                    {preset.save && (
+                      <span className="pointer-events-none absolute -top-2.5 left-1/2 -translate-x-1/2 bg-accent-500 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
+                        {preset.save}
+                      </span>
+                    )}
+                    <p className="font-[family-name:var(--font-heading)] font-700 text-sm sm:text-base text-neutral-900">
+                      {preset.label}
+                    </p>
+                    <p className="text-[10px] sm:text-xs text-neutral-500 mt-0.5">
+                      ${preset.price.toFixed(2)}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Quantity — Custom stepper */}
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-xs text-neutral-500">Or choose your own:</span>
+              <div className="inline-flex items-center border-2 border-neutral-200 rounded-full overflow-hidden">
+                <button
+                  type="button"
+                  onClick={decrement}
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 transition-colors"
+                  aria-label="Decrease quantity"
+                >
+                  <Minus size={14} />
+                </button>
+                <span className="w-10 sm:w-12 text-center text-sm font-semibold text-neutral-900 font-[family-name:var(--font-heading)]">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={increment}
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 transition-colors"
+                  aria-label="Increase quantity"
+                >
+                  <Plus size={14} />
+                </button>
               </div>
             </div>
 
@@ -208,7 +316,6 @@ export default function ProductShowcase() {
                   {activeColour.label}
                 </span>
               </p>
-
               <div className="flex gap-3">
                 {colours.map((colour) => (
                   <button
@@ -236,7 +343,6 @@ export default function ProductShowcase() {
               <p className="text-sm font-semibold text-neutral-700 mb-3">
                 Size:
               </p>
-
               <div className="flex gap-3">
                 {sizes.map((size) => (
                   <button
@@ -268,10 +374,24 @@ export default function ProductShowcase() {
             {/* CTA */}
             <button
               type="button"
-              className="w-full flex items-center justify-center gap-2 bg-neutral-900 text-white font-semibold px-8 py-3.5 sm:py-4 rounded-full text-sm sm:text-base hover:bg-neutral-800 transition-colors mb-6"
+              onClick={handleAddToCart}
+              className={`w-full flex items-center justify-center gap-2 font-semibold px-8 py-3.5 sm:py-4 rounded-full text-sm sm:text-base transition-all duration-300 mb-6 ${
+                addedFeedback
+                  ? "bg-accent-500 text-white scale-[1.02]"
+                  : "bg-neutral-900 text-white hover:bg-neutral-800"
+              }`}
             >
-              <ShoppingBag size={18} />
-              Add to Cart
+              {addedFeedback ? (
+                <>
+                  <Check size={18} />
+                  Added to Cart!
+                </>
+              ) : (
+                <>
+                  <ShoppingBag size={18} />
+                  Add to Cart — ${totalPrice.toFixed(2)}
+                </>
+              )}
             </button>
 
             {/* FEATURES */}
