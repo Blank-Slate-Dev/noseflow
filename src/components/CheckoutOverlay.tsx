@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { X, Wind, Lock, Truck, RotateCcw } from "lucide-react";
+import { X, Lock, Truck, RotateCcw } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 type CheckoutStep = "intro" | "details" | "success";
@@ -30,17 +30,14 @@ export default function CheckoutOverlay() {
     phone: "",
   });
 
-  // Reset to intro when overlay opens
   useEffect(() => {
     if (isCheckoutOpen) {
       setStep("intro");
-      // Auto-advance from intro to details after animation
-      const timer = setTimeout(() => setStep("details"), 2000);
+      const timer = setTimeout(() => setStep("details"), 2800);
       return () => clearTimeout(timer);
     }
   }, [isCheckoutOpen]);
 
-  // Lock body scroll
   useEffect(() => {
     if (isCheckoutOpen) {
       document.body.style.overflow = "hidden";
@@ -57,8 +54,6 @@ export default function CheckoutOverlay() {
   };
 
   const handlePlaceOrder = () => {
-    // This is where Stripe will be wired in.
-    // For now, show the success step.
     setStep("success");
   };
 
@@ -74,7 +69,6 @@ export default function CheckoutOverlay() {
 
   return (
     <div className="fixed inset-0 z-[80] bg-white">
-      {/* Close button — always visible */}
       {step !== "success" && (
         <button
           type="button"
@@ -86,32 +80,114 @@ export default function CheckoutOverlay() {
         </button>
       )}
 
-      {/* STEP 1: Intro animation */}
+      {/* STEP 1: Breathing intro animation */}
       {step === "intro" && (
-        <div className="flex flex-col items-center justify-center h-full px-6 text-center">
-          <Wind
-            size={48}
-            className="text-primary-400 mb-6 animate-pulse"
-          />
-          <h1
-            className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900 mb-4"
-            style={{
-              animation: "fadeInUp 0.8s ease-out forwards",
-            }}
+        <div className="flex flex-col items-center justify-center h-full px-6 text-center relative overflow-hidden">
+          {/* Expanding breath circle */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div
+              className="rounded-full bg-primary-100/40"
+              style={{
+                animation: "breathExpand 2.8s ease-out forwards",
+              }}
+            />
+          </div>
+
+          {/* Airflow lines sweeping across */}
+          <svg
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            viewBox="0 0 1200 800"
+            fill="none"
+            style={{ animation: "fadeIn 0.5s ease-out forwards" }}
           >
-            {"You're on your way to"}
-            <br />
-            <span className="text-primary-500">breathing better.</span>
-          </h1>
-          <p
-            className="text-neutral-500 text-base sm:text-lg font-[family-name:var(--font-body)]"
-            style={{
-              animation: "fadeInUp 0.8s ease-out 0.3s forwards",
-              opacity: 0,
-            }}
-          >
-            {"Let's finalise your order."}
-          </p>
+            <path
+              d="M-200 400 Q200 300 600 400 Q1000 500 1400 400"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="text-primary-300/30"
+              style={{ animation: "flowRight 2s ease-out 0.2s forwards", strokeDasharray: 2000, strokeDashoffset: 2000 }}
+            />
+            <path
+              d="M-200 340 Q200 260 600 340 Q1000 420 1400 340"
+              stroke="currentColor"
+              strokeWidth="1"
+              className="text-accent-300/25"
+              style={{ animation: "flowRight 2.2s ease-out 0.4s forwards", strokeDasharray: 2000, strokeDashoffset: 2000 }}
+            />
+            <path
+              d="M-200 460 Q200 380 600 460 Q1000 540 1400 460"
+              stroke="currentColor"
+              strokeWidth="1"
+              className="text-primary-200/20"
+              style={{ animation: "flowRight 2.4s ease-out 0.6s forwards", strokeDasharray: 2000, strokeDashoffset: 2000 }}
+            />
+          </svg>
+
+          {/* Floating particles */}
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-2 h-2 rounded-full bg-primary-300/30"
+                style={{
+                  left: `${10 + i * 12}%`,
+                  top: `${30 + (i % 3) * 20}%`,
+                  animation: `particleDrift ${1.5 + i * 0.3}s ease-out ${0.3 + i * 0.15}s forwards`,
+                  opacity: 0,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Main text content */}
+          <div className="relative z-10">
+            {/* Logo icon with breath pulse */}
+            <div
+              className="mx-auto mb-8 relative"
+              style={{ animation: "fadeInScale 0.6s ease-out forwards" }}
+            >
+              <div className="w-20 h-20 rounded-full bg-primary-50 border border-primary-200/50 flex items-center justify-center mx-auto overflow-hidden">
+                <Image
+                  src="/icon.png"
+                  alt="NoseFlow"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 object-contain"
+                  style={{ animation: "breathPulse 2s ease-in-out 0.5s infinite" }}
+                />
+              </div>
+              {/* Pulse rings */}
+              <div
+                className="absolute inset-0 w-20 h-20 rounded-full border border-primary-200/40 mx-auto"
+                style={{ animation: "pulseRing 2s ease-out 0.8s infinite" }}
+              />
+              <div
+                className="absolute inset-0 w-20 h-20 rounded-full border border-primary-200/30 mx-auto"
+                style={{ animation: "pulseRing 2s ease-out 1.2s infinite" }}
+              />
+            </div>
+
+            <h1
+              className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900 mb-4"
+              style={{ animation: "fadeInUp 0.7s ease-out 0.3s forwards", opacity: 0 }}
+            >
+              Clear air ahead.
+            </h1>
+
+            <p
+              className="text-neutral-500 text-base sm:text-lg font-[family-name:var(--font-body)] mb-2"
+              style={{ animation: "fadeInUp 0.7s ease-out 0.6s forwards", opacity: 0 }}
+            >
+              {"You're about to breathe better."}
+            </p>
+
+            <p
+              className="text-primary-500/60 text-sm font-[family-name:var(--font-body)]"
+              style={{ animation: "fadeInUp 0.7s ease-out 0.9s forwards", opacity: 0 }}
+            >
+              Preparing your order...
+            </p>
+          </div>
         </div>
       )}
 
@@ -122,18 +198,23 @@ export default function CheckoutOverlay() {
           style={{ animation: "fadeIn 0.5s ease-out forwards" }}
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-            {/* Header */}
             <div className="text-center mb-8 sm:mb-12">
-              <Wind size={28} className="mx-auto mb-3 text-primary-400" />
+              <div className="w-10 h-10 rounded-full bg-primary-50 border border-primary-200/50 flex items-center justify-center mx-auto mb-3 overflow-hidden">
+                <Image
+                  src="/icon.png"
+                  alt="NoseFlow"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 object-contain"
+                />
+              </div>
               <h2 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-800 text-neutral-900">
                 Complete Your Order
               </h2>
             </div>
 
             <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
-              {/* Left — Form */}
               <div className="lg:col-span-3 space-y-6">
-                {/* Contact */}
                 <div>
                   <h3 className="font-[family-name:var(--font-heading)] text-sm font-700 uppercase tracking-widest text-neutral-400 mb-4">
                     Contact
@@ -148,7 +229,6 @@ export default function CheckoutOverlay() {
                   />
                 </div>
 
-                {/* Shipping */}
                 <div>
                   <h3 className="font-[family-name:var(--font-heading)] text-sm font-700 uppercase tracking-widest text-neutral-400 mb-4">
                     Shipping Address
@@ -215,7 +295,6 @@ export default function CheckoutOverlay() {
                   />
                 </div>
 
-                {/* Payment — Stripe placeholder */}
                 <div>
                   <h3 className="font-[family-name:var(--font-heading)] text-sm font-700 uppercase tracking-widest text-neutral-400 mb-4">
                     Payment
@@ -234,7 +313,6 @@ export default function CheckoutOverlay() {
                   </div>
                 </div>
 
-                {/* Place order button */}
                 <button
                   type="button"
                   onClick={handlePlaceOrder}
@@ -244,7 +322,6 @@ export default function CheckoutOverlay() {
                   Place Order — ${orderTotal.toFixed(2)}
                 </button>
 
-                {/* Trust signals */}
                 <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-neutral-400 font-[family-name:var(--font-body)]">
                   <span className="flex items-center gap-1.5">
                     <Lock size={12} />
@@ -261,7 +338,6 @@ export default function CheckoutOverlay() {
                 </div>
               </div>
 
-              {/* Right — Order summary */}
               <div className="lg:col-span-2">
                 <div className="bg-neutral-50 rounded-2xl border border-neutral-200/60 p-6 lg:sticky lg:top-8">
                   <h3 className="font-[family-name:var(--font-heading)] text-sm font-700 uppercase tracking-widest text-neutral-400 mb-4">
@@ -348,44 +424,101 @@ export default function CheckoutOverlay() {
       {/* STEP 3: Success */}
       {step === "success" && (
         <div
-          className="flex flex-col items-center justify-center h-full px-6 text-center"
+          className="flex flex-col items-center justify-center h-full px-6 text-center relative overflow-hidden"
           style={{ animation: "fadeIn 0.5s ease-out forwards" }}
         >
-          <div
-            className="w-20 h-20 rounded-full bg-accent-100 flex items-center justify-center mb-6"
-            style={{ animation: "scaleIn 0.4s ease-out forwards" }}
-          >
-            <Wind size={36} className="text-accent-600" />
+          {/* Background breath burst */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div
+              className="rounded-full bg-accent-100/30"
+              style={{ animation: "breathExpand 2s ease-out forwards" }}
+            />
           </div>
 
-          <h1 className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900 mb-4">
-            {"You're all set!"}
-          </h1>
+          {/* Floating particles */}
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1.5 h-1.5 rounded-full bg-accent-400/30"
+                style={{
+                  left: `${20 + i * 12}%`,
+                  top: `${35 + (i % 3) * 15}%`,
+                  animation: `particleRise ${1.2 + i * 0.2}s ease-out ${0.2 + i * 0.1}s forwards`,
+                  opacity: 0,
+                }}
+              />
+            ))}
+          </div>
 
-          <p className="text-neutral-500 text-base sm:text-lg max-w-md mb-2 font-[family-name:var(--font-body)]">
-            Your NoseFlow order has been placed. Better breathing is on its way.
-          </p>
+          <div className="relative z-10">
+            {/* Checkmark with breath ring */}
+            <div
+              className="relative mx-auto mb-6"
+              style={{ animation: "scaleIn 0.4s ease-out forwards" }}
+            >
+              <div className="w-24 h-24 rounded-full bg-accent-50 border-2 border-accent-200 flex items-center justify-center">
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="text-accent-600"
+                  style={{ animation: "drawCheck 0.5s ease-out 0.3s forwards", strokeDasharray: 30, strokeDashoffset: 30 }}
+                >
+                  <path
+                    d="M5 13l4 4L19 7"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <div
+                className="absolute inset-0 w-24 h-24 rounded-full border border-accent-200/40 mx-auto"
+                style={{ animation: "pulseRing 1.5s ease-out 0.5s infinite" }}
+              />
+            </div>
 
-          <p className="text-sm text-neutral-400 mb-8 font-[family-name:var(--font-body)]">
-            {"We'll send a confirmation to your email shortly."}
-          </p>
+            <h1
+              className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900 mb-3"
+              style={{ animation: "fadeInUp 0.6s ease-out 0.2s forwards", opacity: 0 }}
+            >
+              Breathe easy.
+            </h1>
 
-          <button
-            type="button"
-            onClick={handleSuccessClose}
-            className="inline-flex items-center gap-2 bg-neutral-900 text-white font-semibold px-8 py-4 rounded-full text-base hover:bg-neutral-800 transition-colors"
-          >
-            Continue Browsing
-          </button>
+            <p
+              className="text-neutral-500 text-base sm:text-lg max-w-md mb-2 font-[family-name:var(--font-body)]"
+              style={{ animation: "fadeInUp 0.6s ease-out 0.4s forwards", opacity: 0 }}
+            >
+              Your NoseFlow order is confirmed. Clearer breathing is on its way.
+            </p>
+
+            <p
+              className="text-sm text-neutral-400 mb-8 font-[family-name:var(--font-body)]"
+              style={{ animation: "fadeInUp 0.6s ease-out 0.6s forwards", opacity: 0 }}
+            >
+              {"We'll send a confirmation to your email shortly."}
+            </p>
+
+            <button
+              type="button"
+              onClick={handleSuccessClose}
+              className="inline-flex items-center gap-2 bg-neutral-900 text-white font-semibold px-8 py-4 rounded-full text-base hover:bg-neutral-800 transition-colors"
+              style={{ animation: "fadeInUp 0.6s ease-out 0.8s forwards", opacity: 0 }}
+            >
+              Continue Browsing
+            </button>
+          </div>
         </div>
       )}
 
-      {/* Keyframe styles */}
       <style jsx>{`
         @keyframes fadeInUp {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(24px);
           }
           to {
             opacity: 1;
@@ -393,11 +526,17 @@ export default function CheckoutOverlay() {
           }
         }
         @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes fadeInScale {
           from {
             opacity: 0;
+            transform: scale(0.8);
           }
           to {
             opacity: 1;
+            transform: scale(1);
           }
         }
         @keyframes scaleIn {
@@ -408,6 +547,76 @@ export default function CheckoutOverlay() {
           to {
             opacity: 1;
             transform: scale(1);
+          }
+        }
+        @keyframes breathExpand {
+          0% {
+            width: 40px;
+            height: 40px;
+            opacity: 0.6;
+          }
+          100% {
+            width: 800px;
+            height: 800px;
+            opacity: 0;
+          }
+        }
+        @keyframes breathPulse {
+          0%, 100% {
+            transform: scale(1);
+            opacity: 0.8;
+          }
+          50% {
+            transform: scale(1.15);
+            opacity: 1;
+          }
+        }
+        @keyframes pulseRing {
+          0% {
+            transform: scale(1);
+            opacity: 0.5;
+          }
+          100% {
+            transform: scale(2);
+            opacity: 0;
+          }
+        }
+        @keyframes flowRight {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+        @keyframes particleDrift {
+          0% {
+            opacity: 0;
+            transform: translate(0, 0) scale(0.5);
+          }
+          30% {
+            opacity: 0.6;
+            transform: translate(30px, -20px) scale(1);
+          }
+          100% {
+            opacity: 0;
+            transform: translate(80px, -60px) scale(0.3);
+          }
+        }
+        @keyframes particleRise {
+          0% {
+            opacity: 0;
+            transform: translateY(0) scale(0.5);
+          }
+          40% {
+            opacity: 0.5;
+            transform: translateY(-30px) scale(1);
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(-80px) scale(0.2);
+          }
+        }
+        @keyframes drawCheck {
+          to {
+            stroke-dashoffset: 0;
           }
         }
       `}</style>

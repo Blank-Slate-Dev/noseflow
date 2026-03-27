@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Wind, Moon, Activity, Brain, Zap } from "lucide-react";
 
 const tabs = [
@@ -11,6 +12,7 @@ const tabs = [
     icon: Wind,
     title: "WHY NASAL BREATHING MATTERS",
     body: "Your nose is designed to be your primary breathing organ. It filters, warms, and humidifies air before it reaches your lungs. Nasal breathing produces nitric oxide, which improves oxygen absorption by up to 18%. Many people unknowingly breathe through their mouth due to a narrow nasal valve — the narrowest point of the airway. NoseFlow gently expands this valve, restoring natural nasal airflow.",
+    image: "/nasal_breathing.png",
   },
   {
     id: "sleep",
@@ -18,6 +20,7 @@ const tabs = [
     icon: Moon,
     title: "BETTER SLEEP STARTS WITH YOUR NOSE",
     body: "Mouth breathing during sleep is linked to snoring, dry mouth, disrupted sleep cycles, and reduced oxygen saturation. By opening the nasal passages, NoseFlow helps maintain consistent nasal breathing throughout the night. Users report falling asleep faster, snoring less, and waking up feeling more rested — without drugs, strips, or machinery.",
+    image: "/sleep_quality.png",
   },
   {
     id: "snoring",
@@ -25,6 +28,7 @@ const tabs = [
     icon: Activity,
     title: "REDUCE SNORING AT THE SOURCE",
     body: "Snoring often starts at the nasal valve. When airflow is restricted through the nose, you compensate by opening your mouth — and the soft tissues in the throat vibrate, creating the snoring sound. NoseFlow addresses this at the source by widening the nasal passage, reducing the need for mouth breathing and minimising snoring naturally.",
+    image: "/snoring.png",
   },
   {
     id: "performance",
@@ -32,6 +36,7 @@ const tabs = [
     icon: Zap,
     title: "BREATHE BETTER, PERFORM BETTER",
     body: "Athletes and coaches increasingly focus on nasal breathing for performance gains. Breathing through the nose during exercise maintains optimal CO₂ and O₂ balance, improves endurance, and reduces perceived exertion. NoseFlow is used by runners, cyclists, gym-goers, and anyone who wants to maximise oxygen efficiency during training.",
+    image: "/performance.png",
   },
   {
     id: "mouth-breathing",
@@ -39,13 +44,13 @@ const tabs = [
     icon: Brain,
     title: "THE HIDDEN COST OF MOUTH BREATHING",
     body: "Chronic mouth breathing is linked to poor sleep quality, increased anxiety, dental problems, facial structure changes, and reduced cognitive performance. Many people don't realise they're mouth breathers — especially during sleep. NoseFlow offers a simple, non-invasive way to encourage nasal breathing and break the mouth-breathing habit.",
+    image: "/mouth_breathing.png",
   },
 ];
 
 export default function ScienceSection() {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
   const active = tabs.find((t) => t.id === activeTab)!;
-  const ActiveIcon = active.icon;
 
   return (
     <section id="science" className="py-12 sm:py-28 gradient-section">
@@ -69,6 +74,7 @@ export default function ScienceSection() {
             return (
               <button
                 key={tab.id}
+                type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all font-[family-name:var(--font-body)] ${
                   isActive
@@ -85,24 +91,15 @@ export default function ScienceSection() {
 
         {/* Tab content */}
         <div className="grid lg:grid-cols-2 gap-6 sm:gap-10 items-center">
-          {/* Left — Image placeholder */}
-          <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-primary-50 to-white border border-primary-100 flex items-center justify-center">
-            <div className="text-center px-8">
-              <ActiveIcon
-                size={36}
-                className="mx-auto mb-3 text-primary-300 sm:hidden"
-              />
-              <ActiveIcon
-                size={48}
-                className="mx-auto mb-3 text-primary-300 hidden sm:block"
-              />
-              <p className="text-xs sm:text-sm font-semibold text-neutral-400 font-[family-name:var(--font-heading)]">
-                Educational Visual
-              </p>
-              <p className="text-[10px] sm:text-xs text-neutral-400 mt-1 font-[family-name:var(--font-body)]">
-                Add supporting image or diagram
-              </p>
-            </div>
+          {/* Left — Image */}
+          <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-primary-50 to-white border border-primary-100 overflow-hidden relative">
+            <Image
+              src={active.image}
+              alt={active.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
           </div>
 
           {/* Right — Text content */}
