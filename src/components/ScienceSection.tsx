@@ -66,7 +66,8 @@ export default function ScienceSection() {
             The Science
           </p>
           <h2 className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900">
-            Backed by <span className="text-primary-500">Evidence</span>
+            The Science Behind{" "}
+            <span className="text-primary-500">Nasal Breathing</span>
           </h2>
         </div>
 

@@ -30,9 +30,8 @@ export default function CtaBanner() {
         <Wind size={32} className="mx-auto mb-4 sm:mb-6 text-primary-400" />
 
         <h2 className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl lg:text-6xl font-800 text-white leading-tight mb-4 sm:mb-6">
-          Ready to Breathe
-          <br />
-          <span className="text-primary-400">Better?</span>
+          Try NoseFlow —{" "}
+          <span className="text-primary-400">Free Shipping Over $25</span>
         </h2>
 
         <p className="text-sm sm:text-lg text-neutral-400 max-w-xl mx-auto mb-8 sm:mb-10 font-[family-name:var(--font-body)]">

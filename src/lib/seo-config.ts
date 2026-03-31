@@ -9,9 +9,9 @@ export const siteConfig = {
   ogImageWidth: 1200,
   ogImageHeight: 630,
   title:
-    "NoseFlow — Medical-Grade Nasal Dilators for Better Breathing | Australia",
+    "NoseFlow — Medical-Grade Nasal Dilators | Reduce Snoring & Improve Breathing",
   description:
-    "Medical-grade silicone nasal dilators designed to improve airflow, reduce snoring, and optimise breathing for sleep and performance. From $14.95 with free shipping over $25. Australian owned & operated.",
+    "Reusable medical-grade silicone nasal dilators from $14.95. Improve airflow, reduce snoring, and breathe better during sleep and exercise. Free shipping over $25. Australian owned.",
   shortDescription:
-    "Medical-grade silicone nasal dilators designed to improve airflow, reduce snoring, and optimise breathing for sleep and performance.",
+    "Reusable medical-grade silicone nasal dilators that improve airflow, reduce snoring, and support better breathing for sleep and performance.",
 } as const;

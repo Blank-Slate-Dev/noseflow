@@ -10,16 +10,9 @@ const footerLinks = {
     { label: "Reviews", href: "#reviews" },
   ],
   Support: [
-    { label: "Shipping", href: "#" },
-    { label: "Returns", href: "#" },
+    { label: "Shipping & Returns", href: "#faq" },
     { label: "FAQ", href: "#faq" },
-    { label: "Contact Us", href: "#" },
-  ],
-  Company: [
-    { label: "Our Story", href: "#" },
-    { label: "Blog", href: "#" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
+    { label: "Contact Us", href: "#faq" },
   ],
 };
 
@@ -27,7 +20,7 @@ export default function Footer() {
   return (
     <footer className="bg-neutral-950 text-neutral-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-10">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand column */}
           <div className="lg:col-span-2">
             <a
@@ -86,17 +79,6 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} NoseFlow. All rights reserved.
             Australian owned &amp; operated.
           </p>
-          <div className="flex items-center gap-4 text-xs text-neutral-600 font-[family-name:var(--font-body)]">
-            <a href="#" className="hover:text-white transition-colors">
-              Privacy
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Terms
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Cookies
-            </a>
-          </div>
         </div>
       </div>
     </footer>
