@@ -78,8 +78,8 @@ export default function ProductShowcase() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 sm:mb-16">
           <h2 className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900 mb-4">
-            One Product.{" "}
-            <span className="text-primary-500">Better Breathing.</span>
+            NoseFlow Silicone{" "}
+            <span className="text-primary-500">Nasal Dilator</span>
           </h2>
           <p className="text-base sm:text-lg text-neutral-500 max-w-2xl mx-auto font-[family-name:var(--font-body)]">
             Our silicone nasal dilators gently expand the nasal valve — the
@@ -122,6 +122,7 @@ export default function ProductShowcase() {
                       width={500}
                       height={500}
                       className="relative w-[104%] sm:w-[98%] h-auto object-contain drop-shadow-[0_28px_65px_rgba(0,0,0,0.22)] -translate-y-1"
+                      sizes="(max-width: 1024px) 420px, 420px"
                       priority
                     />
                   </motion.div>
@@ -151,7 +152,7 @@ export default function ProductShowcase() {
             </p>
 
             <h3 className="font-[family-name:var(--font-heading)] text-2xl sm:text-4xl font-800 text-neutral-900 mb-2">
-              Silicone Nasal Dilator
+              Choose Your NoseFlow Dilator
             </h3>
 
             {/* Price display */}
@@ -216,7 +217,7 @@ export default function ProductShowcase() {
                 <button
                   type="button"
                   onClick={decrement}
-                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 transition-colors"
+                  className="w-11 h-11 sm:w-10 sm:h-10 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 transition-colors"
                   aria-label="Decrease quantity"
                 >
                   <Minus size={14} />
@@ -227,7 +228,7 @@ export default function ProductShowcase() {
                 <button
                   type="button"
                   onClick={increment}
-                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 transition-colors"
+                  className="w-11 h-11 sm:w-10 sm:h-10 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 transition-colors"
                   aria-label="Increase quantity"
                 >
                   <Plus size={14} />

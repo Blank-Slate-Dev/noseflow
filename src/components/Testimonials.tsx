@@ -30,7 +30,8 @@ export default function Testimonials() {
             Reviews
           </p>
           <h2 className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900">
-            Hear From Real <span className="text-primary-500">Breathers</span>
+            Customer{" "}
+            <span className="text-primary-500">Reviews</span>
           </h2>
         </div>
 

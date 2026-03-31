@@ -31,7 +31,7 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
         }`}
       >
         <div className="overflow-hidden">
-          <p className="pb-4 sm:pb-5 text-neutral-600 text-xs sm:text-base leading-relaxed font-[family-name:var(--font-body)] max-w-3xl">
+          <p className="pb-4 sm:pb-5 text-neutral-600 text-sm sm:text-base leading-relaxed font-[family-name:var(--font-body)] max-w-3xl">
             {answer}
           </p>
         </div>
@@ -50,7 +50,8 @@ export default function Faq() {
             FAQ
           </p>
           <h2 className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-neutral-900">
-            Questions? <span className="text-primary-500">Answered.</span>
+            Frequently Asked{" "}
+            <span className="text-primary-500">Questions</span>
           </h2>
         </div>
 

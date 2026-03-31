@@ -23,7 +23,7 @@ export default function StatsBar() {
               <p className="font-[family-name:var(--font-heading)] text-xs sm:text-sm font-700 text-neutral-900 uppercase tracking-wide mb-1">
                 {stat.label}
               </p>
-              <p className="text-[10px] sm:text-xs text-neutral-500 font-[family-name:var(--font-body)]">
+              <p className="text-xs sm:text-sm text-neutral-500 font-[family-name:var(--font-body)]">
                 {stat.sublabel}
               </p>
             </div>

@@ -49,11 +49,12 @@ export default function Hero() {
             </div>
 
             <h1 className="font-[family-name:var(--font-heading)] text-4xl sm:text-6xl lg:text-7xl font-800 leading-[0.95] tracking-tight text-neutral-900 mb-4 sm:mb-6">
-              Breathe
+              Medical-Grade
               <br />
-              <span className="text-primary-500">Better.</span>
+              Nasal{" "}
+              <span className="text-primary-500">Dilators</span>
               <br />
-              Naturally.
+              for Better Breathing
             </h1>
 
             <p className="text-base sm:text-xl text-neutral-600 max-w-lg mx-auto lg:mx-0 leading-relaxed mb-6 sm:mb-8 font-[family-name:var(--font-body)]">
@@ -106,6 +107,7 @@ export default function Hero() {
                 width={480}
                 height={480}
                 className="relative w-full h-full object-contain drop-shadow-lg"
+                sizes="(max-width: 640px) 224px, (max-width: 1024px) 384px, 480px"
                 priority
               />
 
