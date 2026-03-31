@@ -1,0 +1,23 @@
+{
+  "name": "NoseFlow — Breathe Better. Sleep Better. Perform Better.",
+  "short_name": "NoseFlow",
+  "description": "Medical-grade silicone nasal dilators designed to improve airflow, reduce snoring, and optimise breathing for sleep and performance.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "lang": "en-AU",
+  "categories": ["health", "shopping"],
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
