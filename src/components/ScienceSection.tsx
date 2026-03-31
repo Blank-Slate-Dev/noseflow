@@ -13,6 +13,7 @@ const tabs = [
     title: "WHY NASAL BREATHING MATTERS",
     body: "Your nose is designed to be your primary breathing organ. It filters, warms, and humidifies air before it reaches your lungs. Nasal breathing produces nitric oxide, which improves oxygen absorption by up to 18%. Many people unknowingly breathe through their mouth due to a narrow nasal valve — the narrowest point of the airway. NoseFlow gently expands this valve, restoring natural nasal airflow.",
     image: "/nasal_breathing.png",
+    alt: "Illustration showing airflow through nasal passages during nasal breathing",
   },
   {
     id: "sleep",
@@ -21,6 +22,7 @@ const tabs = [
     title: "BETTER SLEEP STARTS WITH YOUR NOSE",
     body: "Mouth breathing during sleep is linked to snoring, dry mouth, disrupted sleep cycles, and reduced oxygen saturation. By opening the nasal passages, NoseFlow helps maintain consistent nasal breathing throughout the night. Users report falling asleep faster, snoring less, and waking up feeling more rested — without drugs, strips, or machinery.",
     image: "/sleep_quality.png",
+    alt: "Person sleeping peacefully with improved nasal breathing and sleep quality",
   },
   {
     id: "snoring",
@@ -29,6 +31,7 @@ const tabs = [
     title: "REDUCE SNORING AT THE SOURCE",
     body: "Snoring often starts at the nasal valve. When airflow is restricted through the nose, you compensate by opening your mouth — and the soft tissues in the throat vibrate, creating the snoring sound. NoseFlow addresses this at the source by widening the nasal passage, reducing the need for mouth breathing and minimising snoring naturally.",
     image: "/snoring.png",
+    alt: "Diagram showing how nasal dilators reduce snoring by opening the nasal valve",
   },
   {
     id: "performance",
@@ -37,6 +40,7 @@ const tabs = [
     title: "BREATHE BETTER, PERFORM BETTER",
     body: "Athletes and coaches increasingly focus on nasal breathing for performance gains. Breathing through the nose during exercise maintains optimal CO₂ and O₂ balance, improves endurance, and reduces perceived exertion. NoseFlow is used by runners, cyclists, gym-goers, and anyone who wants to maximise oxygen efficiency during training.",
     image: "/performance.png",
+    alt: "Athlete performing with improved breathing efficiency using a nasal dilator",
   },
   {
     id: "mouth-breathing",
@@ -45,6 +49,7 @@ const tabs = [
     title: "THE HIDDEN COST OF MOUTH BREATHING",
     body: "Chronic mouth breathing is linked to poor sleep quality, increased anxiety, dental problems, facial structure changes, and reduced cognitive performance. Many people don't realise they're mouth breathers — especially during sleep. NoseFlow offers a simple, non-invasive way to encourage nasal breathing and break the mouth-breathing habit.",
     image: "/mouth_breathing.png",
+    alt: "Comparison showing the effects of mouth breathing versus nasal breathing on health",
   },
 ];
 
@@ -95,7 +100,7 @@ export default function ScienceSection() {
           <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-primary-50 to-white border border-primary-100 overflow-hidden relative">
             <Image
               src={active.image}
-              alt={active.title}
+              alt={active.alt}
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
