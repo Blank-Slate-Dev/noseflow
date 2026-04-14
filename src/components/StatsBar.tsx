@@ -1,10 +1,10 @@
 // src/components/StatsBar.tsx
 
 const stats = [
-  { value: "2", label: "Sizes Available", sublabel: "M / L" },
-  { value: "100%", label: "Medical-Grade", sublabel: "Soft Silicone" },
-  { value: "0", label: "Drugs or Chemicals", sublabel: "Natural Support" },
-  { value: "∞", label: "Reusable", sublabel: "Wash & Reuse" },
+  { value: "2", label: "Sizes Available", sublabel: "M / L", isSymbol: false },
+  { value: "100%", label: "Medical-Grade", sublabel: "Soft Silicone", isSymbol: false },
+  { value: "0", label: "Drugs or Chemicals", sublabel: "Natural Support", isSymbol: false },
+  { value: "∞", label: "Reusable", sublabel: "Wash & Reuse", isSymbol: true },
 ];
 
 export default function StatsBar() {
@@ -17,10 +17,17 @@ export default function StatsBar() {
               key={stat.label}
               className="text-center p-4 sm:p-8 rounded-2xl bg-white border border-neutral-200/60 shadow-sm"
             >
-              <p className="font-[family-name:var(--font-heading)] text-3xl sm:text-5xl font-800 text-primary-500 mb-2">
+              <p
+                className="text-3xl sm:text-5xl font-extrabold text-primary-500 mb-2 leading-none"
+                style={{
+                  fontFamily: stat.isSymbol
+                    ? '"Segoe UI Symbol", "Apple Symbols", "Arial Unicode MS", system-ui, sans-serif'
+                    : "var(--font-heading)",
+                }}
+              >
                 {stat.value}
               </p>
-              <p className="font-[family-name:var(--font-heading)] text-xs sm:text-sm font-700 text-neutral-900 uppercase tracking-wide mb-1">
+              <p className="font-[family-name:var(--font-heading)] text-xs sm:text-sm font-bold text-neutral-900 uppercase tracking-wide mb-1">
                 {stat.label}
               </p>
               <p className="text-xs sm:text-sm text-neutral-500 font-[family-name:var(--font-body)]">
